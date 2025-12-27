@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WokFlinn Payment</title>
-  <link rel="stylesheet" href="payment.css">
+  <title>ibalyssr payment</title>
 
+  <link rel="stylesheet" href="payment.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
@@ -13,58 +13,104 @@
 
 <div class="app">
 
-  <!-- top bar -->
   <div class="top-bar">
-    <button id="notifBtn"><i class="ri-notification-3-line"></i><span id="notifCount">0</span></button>
-    <button id="menuBtn"><i class="ri-menu-line"></i></button>
+    <button id="notifBtn">
+      <i class="ri-notification-3-line"></i>
+      <span id="notifCount">0</span>
+    </button>
+    <button><i class="ri-menu-line"></i></button>
   </div>
 
-  <!-- profile -->
   <div class="profile">
-    <img src="kece.png" alt="Profile Picture">
-    <h1>wokflinn</h1>
+    <img src="profil.jpeg">
+    <h1>ibalyssr</h1>
     <span class="username">
-    @WokFlinn <i class="ri-verified-badge-fill verified"></i>
+      @ibalyssr <i class="ri-verified-badge-fill verified"></i>
     </span>
     <p>aman, cepat, terpercaya</p>
   </div>
 
-  <!-- buttons -->
-    <div class="buttons">
-        <button onclick="openPay('qris_gopay')">qris gopay</button>
-        <button onclick="openPay('dana')">dana</button>
-        <button onclick="openPay('gopay')">gopay</button>
-        <button onclick="openPay('qris_dana')">qris dana</button>
+  <div class="buttons">
+    <button onclick="openModal('qris')">qris</button>
+    <button onclick="openModal('dana')">dana</button>
+    <button onclick="openModal('gopay')">gopay</button>
+  </div>
+
+  <!-- WA (area hitam) -->
+  <div class="contact-wa">
+    <p>ada kendala / bug / salah transfer?</p>
+    <a href="https://wa.me/6283152491718" target="_blank">
+      hubungi whatsapp admin
+    </a>
+  </div>
+
+  <!-- SALURAN (area putih) -->
+  <div class="contact-channel">
+    <a href="https://whatsapp.com/channel/0029VbBWDcJF6sn0zVpYUS0j" target="_blank">
+      gabung saluran whatsapp
+    </a>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+
+    <!-- QRIS -->
+    <div class="pay-content" id="qris">
+      <h3>qris</h3>
+      <img src="qris ibal.jpeg">
+      <button class="close" onclick="closeModal()">selesai</button>
     </div>
 
+    <!-- DANA -->
+    <div class="pay-content" id="dana">
+      <h3>dana</h3>
+      <p>083152491718 a/n LESTARI</p>
+      <button class="close" onclick="closeModal()">selesai</button>
+    </div>
 
+    <!-- GOPAY -->
+    <div class="pay-content" id="gopay">
+      <h3>gopay</h3>
+      <p>083152491718 a/n IQBALTAMA</p>
+      <button class="close" onclick="closeModal()">selesai</button>
+    </div>
+
+  </div>
 </div>
 
-<!-- modal -->
-<div class="modal" id="modal">
-  <div class="modal-box" id="modalBox"></div>
-</div>
-
-<!-- notification -->
+<!-- NOTIF -->
 <div class="notif" id="notifBox">
   <h4>aktivitas</h4>
   <div id="notifList"></div>
 </div>
 
-<script src="script.js"></script>
 <script>
 const modal = document.getElementById('modal')
-const modalBox = document.getElementById('modalBox')
 const notifBtn = document.getElementById('notifBtn')
 const notifBox = document.getElementById('notifBox')
 const notifList = document.getElementById('notifList')
 const notifCount = document.getElementById('notifCount')
+const contents = document.querySelectorAll('.pay-content')
 
-let logs = JSON.parse(localStorage.getItem('wokflinn_logs')) || []
+let logs = JSON.parse(localStorage.getItem('logs')) || []
+
+function openModal(id){
+  contents.forEach(c => c.style.display = 'none')
+  document.getElementById(id).style.display = 'block'
+  modal.classList.add('active')
+  addLog('buka ' + id)
+}
+
+function closeModal(){
+  modal.classList.remove('active')
+}
 
 function addLog(text){
   logs.push(text)
-  localStorage.setItem('wokflinn_logs', JSON.stringify(logs))
+  localStorage.setItem('logs', JSON.stringify(logs))
   renderNotif()
 }
 
@@ -82,45 +128,12 @@ function renderNotif(){
   })
 }
 
-notifBtn.onclick = ()=>{
+notifBtn.onclick = () => {
   notifBox.classList.toggle('active')
-}
-
-function openPay(type){
-  let html = ''
-  if(type==='qris_gopay'){
-    html=`<h3>qris gopay</h3>
-    <img src="Qris Gopay.png">
-    <button class="close" onclick="closeModal()">selesai</button>`
-    addLog('buka qris gopay')
-  }
-  if(type==='qris_dana'){
-    html=`<h3>qris dana</h3>
-    <img src="Qris Dana.jpg">
-    <button class="close" onclick="closeModal()">selesai</button>`
-    addLog('buka qris dana')
-  }
-  if(type==='dana'){
-    html=`<h3>dana</h3>
-    <p>081585595822 a/n roflin</p>
-    <button class="close" onclick="closeModal()">selesai</button>`
-    addLog('lihat dana')
-  }
-  if(type==='gopay'){
-    html=`<h3>gopay</h3>
-    <p>081585595822 a/n kylz</p>
-    <button class="close" onclick="closeModal()">selesai</button>`
-    addLog('lihat gopay')
-  }
-  modalBox.innerHTML = html
-  modal.classList.add('active')
-}
-
-function closeModal(){
-  modal.classList.remove('active')
 }
 
 renderNotif()
 </script>
+
 </body>
 </html>
